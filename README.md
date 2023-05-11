@@ -3,7 +3,7 @@
 This repository contains example ASP.NET Core Web API project, that generate self signed JWT token.
 
 It exposes two endpoints:
-- `/pingpong/ping` protected endpoint for text purpose
+- `/test` protected endpoint for test purpose
 - `/auth/token` public endpoint for token generation purpose
 
 To generate a JWT token send POST request to `/auth/token` endpoint with paylod:

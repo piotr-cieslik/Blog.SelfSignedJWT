@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace Blog.SelfSignedJWT.Controllers;
 
 [ApiController]
-[Route("pingpong")]
+[Route("test")]
 [Authorize]
-public class PingPongController : ControllerBase
+public class TestController : ControllerBase
 {
-    [HttpGet("ping")]
-    public IActionResult Ping()
+    [HttpGet]
+    public IActionResult Get()
     {
-        return Content("Pong");
+        return NoContent();
     }
 }
