@@ -25,7 +25,7 @@ public class AuthController : ControllerBase
     public IActionResult Token([FromBody] TokenRequestDto dto)
     {
         // Check if user is valid here.
-        // Pleas do it in more secure way :)
+        // Please do it in more secure way :)
         const string expectedEmail = "user@example.com";
         const string expectedPassword = "1234";
 
@@ -37,17 +37,25 @@ public class AuthController : ControllerBase
         {
             return BadRequest("Invalid email or password");
         }
-
+        
+        // Assume our user has id: 1.
+        const int userId = 1;
+        
+        // Read options from configuration.
         var options = _jwtOptions.Value;
+
+        // Take snapshot of current time and calculate when token expires.
         var now = DateTime.UtcNow;
         var expiresAt = now.AddMinutes(15);
+
+        // Create SigningCredentials using symmetric key from settings.
         var signingCredentials =
             new SigningCredentials(
                 new SymmetricSecurityKey(
                     Encoding.UTF8.GetBytes(options.Key)),
                 SecurityAlgorithms.HmacSha256);
 
-        const int userId = 1;
+        // Optionally define list of extra claims for token.
         var claims =
             new List<Claim>()
             {
@@ -55,18 +63,19 @@ public class AuthController : ControllerBase
                 new (ClaimTypes.Email, dto.Email),
             };
 
+        // Create a token model.
         var token =
             new JwtSecurityToken(
                 issuer: options.Issuer,
                 audience: options.Audience,
-                claims,
+                claims: claims,
                 notBefore: now,
                 expires: expiresAt,
                 signingCredentials: signingCredentials);
-        var tokenHandler =
-            new JwtSecurityTokenHandler();
+
+        // Generate an access token.
         var accessToken =
-            tokenHandler.WriteToken(token);
+            new JwtSecurityTokenHandler().WriteToken(token);
 
         return Ok(new TokenResponseDto
         {
@@ -74,5 +83,4 @@ public class AuthController : ControllerBase
             ExpiresAt = expiresAt,
         });
     }
-
 }

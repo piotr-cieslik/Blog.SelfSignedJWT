@@ -33,6 +33,7 @@ builder.Services
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
+                    // Keep in mind to specify audience, issuer, and key
                     ValidAudience = builder.Configuration["Jwt:Audience"],
                     ValidIssuer = builder.Configuration["Jwt:Issuer"],
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
@@ -51,7 +52,6 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Turn on Authentication service.
-// ADD THIS!
 app.UseAuthentication();
 
 // Add Authorization middleware.
